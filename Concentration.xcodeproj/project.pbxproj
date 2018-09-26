@@ -12,6 +12,8 @@
 		AECD1A6C213FD5F1006225AD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AECD1A6A213FD5F1006225AD /* Main.storyboard */; };
 		AECD1A6E213FD5F1006225AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AECD1A6D213FD5F1006225AD /* Assets.xcassets */; };
 		AECD1A71213FD5F1006225AD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AECD1A6F213FD5F1006225AD /* LaunchScreen.storyboard */; };
+		AEF9EE4E21491F990094C0B7 /* Concentration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF9EE4D21491F990094C0B7 /* Concentration.swift */; };
+		AEF9EE50214921020094C0B7 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF9EE4F214921020094C0B7 /* Theme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		AECD1A6D213FD5F1006225AD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AECD1A70213FD5F1006225AD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AECD1A72213FD5F1006225AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AEF9EE4D21491F990094C0B7 /* Concentration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concentration.swift; sourceTree = "<group>"; };
+		AEF9EE4F214921020094C0B7 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,8 @@
 				AECD1A6D213FD5F1006225AD /* Assets.xcassets */,
 				AECD1A6F213FD5F1006225AD /* LaunchScreen.storyboard */,
 				AECD1A72213FD5F1006225AD /* Info.plist */,
+				AEF9EE4D21491F990094C0B7 /* Concentration.swift */,
+				AEF9EE4F214921020094C0B7 /* Theme.swift */,
 			);
 			path = Concentration;
 			sourceTree = "<group>";
@@ -137,7 +143,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				AECD1A69213FD5F1006225AD /* ViewController.swift in Sources */,
+				AEF9EE50214921020094C0B7 /* Theme.swift in Sources */,
 				AECD1A67213FD5F1006225AD /* AppDelegate.swift in Sources */,
+				AEF9EE4E21491F990094C0B7 /* Concentration.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
