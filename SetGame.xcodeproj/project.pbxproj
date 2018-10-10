@@ -13,6 +13,9 @@
 		AE38880F215B9C4900C1F01E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE38880E215B9C4900C1F01E /* Assets.xcassets */; };
 		AE388812215B9C4900C1F01E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE388810215B9C4900C1F01E /* LaunchScreen.storyboard */; };
 		AE38881A215BA75A00C1F01E /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE388819215BA75A00C1F01E /* SetGame.swift */; };
+		AE948A05216DFD9200C7B542 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE948A04216DFD9200C7B542 /* GridView.swift */; };
+		AE948A09216DFFEE00C7B542 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE948A08216DFFEE00C7B542 /* Grid.swift */; };
+		AE948A0B216E00D600C7B542 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE948A0A216E00D600C7B542 /* CardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		AE388811215B9C4900C1F01E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AE388813215B9C4900C1F01E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE388819215BA75A00C1F01E /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
+		AE948A04216DFD9200C7B542 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		AE948A08216DFFEE00C7B542 /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
+		AE948A0A216E00D600C7B542 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,9 +62,12 @@
 		AE388806215B9C4900C1F01E /* SetGame */ = {
 			isa = PBXGroup;
 			children = (
+				AE948A04216DFD9200C7B542 /* GridView.swift */,
+				AE948A0A216E00D600C7B542 /* CardView.swift */,
 				AE388807215B9C4900C1F01E /* AppDelegate.swift */,
 				AE388809215B9C4900C1F01E /* ViewController.swift */,
 				AE38880B215B9C4900C1F01E /* Main.storyboard */,
+				AE948A08216DFFEE00C7B542 /* Grid.swift */,
 				AE38880E215B9C4900C1F01E /* Assets.xcassets */,
 				AE388810215B9C4900C1F01E /* LaunchScreen.storyboard */,
 				AE388813215B9C4900C1F01E /* Info.plist */,
@@ -141,6 +150,9 @@
 			files = (
 				AE38880A215B9C4900C1F01E /* ViewController.swift in Sources */,
 				AE38881A215BA75A00C1F01E /* SetGame.swift in Sources */,
+				AE948A05216DFD9200C7B542 /* GridView.swift in Sources */,
+				AE948A09216DFFEE00C7B542 /* Grid.swift in Sources */,
+				AE948A0B216E00D600C7B542 /* CardView.swift in Sources */,
 				AE388808215B9C4900C1F01E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

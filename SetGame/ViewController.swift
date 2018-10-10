@@ -37,41 +37,16 @@ class ViewController: UIViewController, GameNotifier {
         }
     }
     
-    func getCharFromFigure(_ figure: Figure) -> String {
-        switch(figure) {
-        case .Circle:
-            return "●"
-        case .Triangle:
-            return "▲"
-        case .Rectangle:
-            return "■"
-        }
-    }
-    
-    func getUIColorFromColor(_ color: Color) -> UIColor {
-        switch(color) {
-        case .Red:
-            return UIColor.red
-        case .Green:
-            return UIColor.green
-        case .Blue:
-            return UIColor.blue
-        }
-    }
-    
     func cardAdded(cardId: Int, card: Card) {
-        cards[cardId].alpha = 1
-        
-        let char = getCharFromFigure(card.figure)
-        let figure = String(repeating: char, count: card.count)
-        cards[cardId].setTitle(figure, for: UIControlState.normal)
-        
-        let color = getUIColorFromColor(card.color)
-        cards[cardId].setTitleColor(color, for: UIControlState.normal)
+        // TODO: Use 'addCard'
+        var cards = grid.cards
+        cards.append(CardView(card))
+        grid.cards = cards
     }
 
     
-    @IBOutlet var cards: [UIButton]!
+    @IBOutlet var cards: [UIButton]! = []
+    @IBOutlet weak var grid: GridView!
     
     var gameManager: SetGame?
     

@@ -9,9 +9,9 @@
 import Foundation
 
 enum Figure {
-    case Circle
-    case Triangle
-    case Rectangle
+    case Diamond
+    case Squiggle
+    case Oval
 }
 
 enum Color {
@@ -20,10 +20,17 @@ enum Color {
     case Blue
 }
 
+enum Fill {
+    case Unfilled
+    case Striped
+    case Solid
+}
+
 struct Card {
     var count: Int
     var figure: Figure
     var color: Color
+    var fill: Fill
 }
 
 protocol GameNotifier {
@@ -58,9 +65,11 @@ class SetGame
         deck.removeAll()
         for count in 1...SetGame.maxFigureCount {
             for color in [ Color.Red, Color.Green, Color.Blue ] {
-                for figure in [ Figure.Circle, Figure.Rectangle, Figure.Triangle ] {
-                    let card = Card(count: count, figure: figure, color: color)
-                    deck.append(card)
+                for figure in [ Figure.Diamond, Figure.Squiggle, Figure.Oval ] {
+                    for fill in [ Fill.Solid, Fill.Striped, Fill.Unfilled ] {
+                        let card = Card(count: count, figure: figure, color: color, fill: fill)
+                        deck.append(card)
+                    }
                 }
             }
         }
