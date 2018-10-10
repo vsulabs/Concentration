@@ -54,47 +54,39 @@ class CardView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        let roundedRect = UIBezierPath(roundedRect: bounds,
-                                       cornerRadius: cornerRadius)
-        faceBackgroundColor.setFill()
-        roundedRect.fill()
+        UIColor.white.setFill()
+        UIRectFill(bounds)
         
-        drawPips()
+        drawPictures()
     }
     
-    private func drawPips(){
-        color.setFill()
-        color.setStroke()
-        
+    private func getOrigin() -> CGPoint {
         switch count {
         case 1:
-            let origin = CGPoint(x: faceFrame.minX, y: faceFrame.midY - pipHeight/2)
-            let size = CGSize(width: faceFrame.width, height: pipHeight)
-            let firstRect = CGRect(origin: origin, size: size)
-            drawShape(in: firstRect)
-            
+            return CGPoint(x: faceFrame.minX, y: faceFrame.midY - pipHeight/2)
         case 2:
-            let origin = CGPoint(x: faceFrame.minX, y: faceFrame.midY - interPipHeight/2 - pipHeight)
-            let size = CGSize(width: faceFrame.width, height: pipHeight)
-            let firstRect = CGRect(origin: origin, size: size)
-            drawShape(in: firstRect)
-            let secondRect = firstRect.offsetBy(dx: 0, dy: pipHeight + interPipHeight)
-            drawShape(in: secondRect)
-            
+            return CGPoint(x: faceFrame.minX, y: faceFrame.midY - interPipHeight/2 - pipHeight)
         case 3:
-            let origin = CGPoint (x: faceFrame.minX, y: faceFrame.minY)
-            let size = CGSize(width: faceFrame.width, height: pipHeight)
-            let firstRect = CGRect(origin: origin, size: size)
-            drawShape(in: firstRect)
-            let secondRect = firstRect.offsetBy(dx: 0, dy: pipHeight + interPipHeight)
-            drawShape(in: secondRect)
-            let thirdRect = secondRect.offsetBy(dx: 0, dy: pipHeight + interPipHeight)
-            drawShape(in: thirdRect)
-        default: break
+            return CGPoint (x: faceFrame.minX, y: faceFrame.minY)
+        default:
+            return CGPoint (x: 0, y: 0)
         }
     }
     
-    private func drawShape(in rect: CGRect) {
+    private func drawPictures(){
+        color.setFill()
+        color.setStroke()
+        
+        let origin = getOrigin()
+        let size = CGSize(width: faceFrame.width, height: pipHeight)
+        var rect = CGRect(origin: origin, size: size)
+        for _ in 0..<count {
+            drawShape(pos: rect)
+            rect = rect.offsetBy(dx: 0, dy: pipHeight + interPipHeight)
+        }
+    }
+    
+    private func drawShape(pos rect: CGRect) {
         let path: UIBezierPath
         switch figure {
         case .Diamond:
@@ -186,7 +178,6 @@ class CardView: UIView {
     }
     
     private func stripeRect(_ rect: CGRect) {
-        //------- classic method
         let stripe = UIBezierPath()
         stripe.lineWidth = 1.0
         stripe.move(to: CGPoint(x: rect.minX, y: bounds.minY ))
@@ -197,18 +188,6 @@ class CardView: UIView {
             stripe.apply(translation)
             stripe.stroke()
         }
-        /*
-         //---- dash line
-         let stripe = UIBezierPath()
-         let  dashes: [ CGFloat ] = [ 1,4 ]
-         stripe.setLineDash(dashes, count: dashes.count, phase: 0.0)
-         
-         stripe.lineWidth = bounds.size.height
-         stripe.lineCapStyle = .butt
-         stripe.move(to: CGPoint(x: bounds.minX, y: bounds.midY ))
-         stripe.addLine(to: CGPoint(x: bounds.maxX, y: bounds.midY))
-         stripe.stroke()
-         */
     }
     
     private func configureState() {
