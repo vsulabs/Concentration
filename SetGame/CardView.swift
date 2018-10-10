@@ -63,9 +63,9 @@ class CardView: UIView {
     private func getOrigin() -> CGPoint {
         switch count {
         case 1:
-            return CGPoint(x: faceFrame.minX, y: faceFrame.midY - pipHeight/2)
+            return CGPoint(x: faceFrame.minX, y: faceFrame.midY - pictureHeight/2)
         case 2:
-            return CGPoint(x: faceFrame.minX, y: faceFrame.midY - interPipHeight/2 - pipHeight)
+            return CGPoint(x: faceFrame.minX, y: faceFrame.midY - interPictureHeight/2 - pictureHeight)
         case 3:
             return CGPoint (x: faceFrame.minX, y: faceFrame.minY)
         default:
@@ -78,11 +78,11 @@ class CardView: UIView {
         color.setStroke()
         
         let origin = getOrigin()
-        let size = CGSize(width: faceFrame.width, height: pipHeight)
+        let size = CGSize(width: faceFrame.width, height: pictureHeight)
         var rect = CGRect(origin: origin, size: size)
         for _ in 0..<count {
             drawShape(pos: rect)
-            rect = rect.offsetBy(dx: 0, dy: pipHeight + interPipHeight)
+            rect = rect.offsetBy(dx: 0, dy: pictureHeight + interPictureHeight)
         }
     }
     
@@ -190,70 +190,25 @@ class CardView: UIView {
         }
     }
     
-    private func configureState() {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
         backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
         isOpaque = false
         contentMode = .redraw
         
-        layer.cornerRadius = cornerRadius
         layer.borderWidth = borderWidth
         layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor
         if isSelected {          // highlight selected card view
-            pinLabel.isHidden = false
             layer.borderColor = Colors.selected
-        }  else {
-            pinLabel.isHidden = true
         }
         if let matched = isMatched { // highlight matched 3 cards
-            pinLabel.isHidden = false
             if matched {
                 layer.borderColor = Colors.matched
             } else {
                 layer.borderColor = Colors.misMatched
             }
         }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        configurePinLabel(pinLabel)
-        let pinOffSet = SizeRatio.pinOffset
-        pinLabel.frame.origin = bounds.origin.offsetBy(dx: bounds.size.width * pinOffSet,
-                                                       dy: bounds.size.height * pinOffSet)
-        configureState()
-    }
-    
-    func hint() {
-        layer.borderWidth = borderWidth
-        layer.borderColor = Colors.hint
-    }
-    
-    // MARK: - Pin
-    private func centeredAttributedString(_ string: String, fontSize: CGFloat) -> NSAttributedString {
-        var font = UIFont.preferredFont(forTextStyle: .body).withSize(fontSize)
-        font = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        return NSAttributedString(string: string, attributes: [.paragraphStyle:paragraphStyle,.font:font])
-    }
-    
-    private var pinString: NSAttributedString {
-        return centeredAttributedString("📌", fontSize: pinFontSize)
-    }
-    
-    private lazy var pinLabel = createPinLabel()
-    
-    private func createPinLabel() -> UILabel {
-        let label = UILabel()
-        addSubview(label)
-        return label
-    }
-    
-    private func configurePinLabel(_ label: UILabel) {
-        label.attributedText = pinString
-        label.frame.size = CGSize.zero
-        label.sizeToFit()
-        label.isHidden = true
     }
     
     private struct Colors {
@@ -268,11 +223,8 @@ class CardView: UIView {
     }
     
     private struct SizeRatio {
-        static let pinFontSizeToBoundsHeight: CGFloat = 0.09
         static let maxFaceSizeToBoundsSize: CGFloat = 0.75
-        static let pipHeightToFaceHeight: CGFloat = 0.25
-        static let cornerRadiusToBoundsHeight: CGFloat = 0.06
-        static let pinOffset: CGFloat = 0.03
+        static let pictureHeightToFaceHeight: CGFloat = 0.25
     }
     
     private struct AspectRatio {
@@ -288,20 +240,12 @@ class CardView: UIView {
         return maxFaceFrame.insetBy(dx: (maxFaceFrame.width - faceWidth)/2, dy: 0)
     }
     
-    private var pipHeight: CGFloat {
-        return faceFrame.height * SizeRatio.pipHeightToFaceHeight
+    private var pictureHeight: CGFloat {
+        return faceFrame.height * SizeRatio.pictureHeightToFaceHeight
     }
     
-    private var pinFontSize: CGFloat {
-        return bounds.size.height * SizeRatio.pinFontSizeToBoundsHeight
-    }
-    
-    private var interPipHeight: CGFloat {
-        return (faceFrame.height - (3 * pipHeight)) / 2
-    }
-    
-    private var cornerRadius: CGFloat {
-        return bounds.size.height * SizeRatio.cornerRadiusToBoundsHeight
+    private var interPictureHeight: CGFloat {
+        return (faceFrame.height - (3 * pictureHeight)) / 2
     }
     
     private let interStripeSpace: CGFloat = 5.0
