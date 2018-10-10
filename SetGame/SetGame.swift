@@ -48,7 +48,7 @@ protocol GameNotifier {
 class SetGame
 {
     static let maxFigureCount = 3;
-    static let totalCardCount = maxFigureCount * 3 * 3;
+    static let totalCardCount = maxFigureCount * 3 * 3 * 3;
     static let cardCountForFirstDeal = 12
     var deck: [Card] = []
     var selectedCardIds = [-1, -1, -1]
@@ -80,6 +80,20 @@ class SetGame
         }
         
         deal(cardCount: SetGame.cardCountForFirstDeal)
+    }
+    
+    func shuffle() {
+        for i in 0..<dealedCardIds.count {
+            let newPosition = Int(arc4random_uniform(UInt32(dealedCardIds.count)))
+            
+            let newPosCard = deck[dealedCardIds[newPosition]]
+            notifier.cardReplaced(cardId: i, card: newPosCard)
+            
+            let oldPosCard = deck[dealedCardIds[i]]
+            notifier.cardReplaced(cardId: newPosition, card: oldPosCard)
+
+            dealedCardIds.swapAt(i, newPosition)
+        }
     }
     
     func deal(cardCount: Int) {

@@ -12,8 +12,6 @@ class CardView: UIView {
     
     var faceBackgroundColor: UIColor = UIColor.white { didSet { setNeedsDisplay()} }
     
-    var isFaceUp: Bool = true { didSet { setNeedsDisplay(); setNeedsLayout() } }
-    
     var isSelected:Bool = false { didSet { setNeedsDisplay(); setNeedsLayout() } }
     var isMatched: Bool? { didSet { setNeedsDisplay(); setNeedsLayout() } }
 
@@ -61,15 +59,7 @@ class CardView: UIView {
         faceBackgroundColor.setFill()
         roundedRect.fill()
         
-        if isFaceUp {
-            drawPips()
-        } else {
-            if let cardBackImage = UIImage(named: "cardback",
-                                           in: Bundle(for: self.classForCoder),
-                                           compatibleWith: traitCollection) {
-                cardBackImage.draw(in: bounds)
-            }
-        }
+        drawPips()
     }
     
     private func drawPips(){
