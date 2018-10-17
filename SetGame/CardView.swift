@@ -16,9 +16,9 @@ class CardView: UIView {
     var isMatched: Bool? { didSet { setNeedsDisplay(); setNeedsLayout() } }
 
     var count: Int = 1 {
-        didSet {setNeedsDisplay(); setNeedsLayout()}
+        didSet {setNeedsDisplay();   setNeedsLayout()}
     }
-    private var color = Colors.red {
+    private var color = UIColor.red {
         didSet { setNeedsDisplay(); setNeedsLayout()}
     }
     private var fill = Fill.Striped {
@@ -63,11 +63,11 @@ class CardView: UIView {
     private func getOrigin() -> CGPoint {
         switch count {
         case 1:
-            return CGPoint(x: faceFrame.minX, y: faceFrame.midY - pictureHeight/2)
+            return CGPoint(x: cardRect.minX, y: cardRect.midY - pictureHeight / 2)
         case 2:
-            return CGPoint(x: faceFrame.minX, y: faceFrame.midY - interPictureHeight/2 - pictureHeight)
+            return CGPoint(x: cardRect.minX, y: cardRect.midY - interPictureHeight / 2 - pictureHeight)
         case 3:
-            return CGPoint (x: faceFrame.minX, y: faceFrame.minY)
+            return CGPoint (x: cardRect.minX, y: cardRect.minY)
         default:
             return CGPoint (x: 0, y: 0)
         }
@@ -78,7 +78,7 @@ class CardView: UIView {
         color.setStroke()
         
         let origin = getOrigin()
-        let size = CGSize(width: faceFrame.width, height: pictureHeight)
+        let size = CGSize(width: cardRect.width, height: pictureHeight)
         var rect = CGRect(origin: origin, size: size)
         for _ in 0..<count {
             drawShape(pos: rect)
@@ -92,9 +92,9 @@ class CardView: UIView {
         case .Diamond:
             path = pathForDiamond(in: rect)
         case .Oval:
-            path = pathForOval(in: rect)
+            path = ovalPath(in: rect)
         case .Squiggle:
-            path = pathForSquiggle(in: rect)
+            path = squigglePath(in: rect)
         }
         
         path.lineWidth = 3.0
@@ -117,72 +117,62 @@ class CardView: UIView {
         context?.restoreGState()
     }
     
-    private func pathForSquiggle(in rect: CGRect) -> UIBezierPath {
-        let upperSquiggle = UIBezierPath()
-        let sqdx = rect.width * 0.1
-        let sqdy = rect.height * 0.2
-        upperSquiggle.move(to: CGPoint(x: rect.minX,
-                                       y: rect.midY))
-        upperSquiggle.addCurve(to:
-            CGPoint(x: rect.minX + rect.width * 1/2,
-                    y: rect.minY + rect.height / 8),
-                               controlPoint1: CGPoint(x: rect.minX,
-                                                      y: rect.minY),
-                               controlPoint2: CGPoint(x: rect.minX + rect.width * 1/2 - sqdx,
-                                                      y: rect.minY + rect.height / 8 - sqdy))
-        upperSquiggle.addCurve(to:
-            CGPoint(x: rect.minX + rect.width * 4/5,
-                    y: rect.minY + rect.height / 8),
-                               controlPoint1: CGPoint(x: rect.minX + rect.width * 1/2 + sqdx,
-                                                      y: rect.minY + rect.height / 8 + sqdy),
-                               controlPoint2: CGPoint(x: rect.minX + rect.width * 4/5 - sqdx,
-                                                      y: rect.minY + rect.height / 8 + sqdy))
+    private func squigglePath(in rect: CGRect) -> UIBezierPath {
+        let path = UIBezierPath()
         
-        upperSquiggle.addCurve(to:
-            CGPoint(x: rect.minX + rect.width,
-                    y: rect.minY + rect.height / 2),
-                               controlPoint1: CGPoint(x: rect.minX + rect.width * 4/5 + sqdx,
-                                                      y: rect.minY + rect.height / 8 - sqdy ),
-                               controlPoint2: CGPoint(x: rect.minX + rect.width,
-                                                      y: rect.minY))
+        let dx = rect.width * 0.5;
+        let dy = rect.height * 0.5;
         
-        let lowerSquiggle = UIBezierPath(cgPath: upperSquiggle.cgPath)
-        lowerSquiggle.apply(CGAffineTransform.identity.rotated(by: CGFloat.pi))
-        lowerSquiggle.apply(CGAffineTransform.identity
-            .translatedBy(x: bounds.width, y: bounds.height))
-        upperSquiggle.move(to: CGPoint(x: rect.minX, y: rect.midY))
-        upperSquiggle.append(lowerSquiggle)
-        return upperSquiggle
+        let dsqx = dx * 0.5;
+        let dsqy = dy * 0.5;
+        let point = CGPoint(x: rect.midX, y: rect.midY)
+        path.move(to: CGPoint(x: point.x - dx, y: point.y))
+        
+        path.addQuadCurve(to: CGPoint(x: point.x - dsqx, y: point.y + dsqy),
+                          controlPoint: CGPoint(x: point.x - dx, y: point.y + dy + dsqy))
+        path.addQuadCurve(to: CGPoint(x: point.x - dsqx, y: point.y + dsqy),
+                          controlPoint: CGPoint(x: point.x - dx, y: point.y + dy + dsqy))
+        
+        path.addCurve(to: CGPoint(x: point.x + dx, y: point.y),
+                      controlPoint1: point,
+                      controlPoint2: CGPoint(x: point.x + dx, y: point.y + dy * 2))
+        path.addQuadCurve(to: CGPoint(x: point.x + dsqx, y: point.y - dsqy),
+                          controlPoint: CGPoint(x: point.x + dx, y: point.y - dy - dsqy))
+        path.addCurve(to: CGPoint(x: point.x - dx, y: point.y),
+                      controlPoint1: point,
+                      controlPoint2: CGPoint(x: point.x - dx, y: point.y - dy * 2))
+        path.close()
+        
+        return path
     }
     
-    private func pathForOval(in rect: CGRect) -> UIBezierPath {
-        let oval = UIBezierPath()
-        let radius = rect.height / 2
-        oval.addArc(withCenter: CGPoint(x: rect.minX + radius, y: rect.minY + radius),
-                    radius: radius, startAngle: CGFloat.pi/2, endAngle: CGFloat.pi*3/2, clockwise: true)
-        oval.addLine(to: CGPoint(x: rect.maxX - radius, y: rect.minY))
-        oval.addArc(withCenter: CGPoint(x: rect.maxX - radius, y: rect.maxY - radius),
-                    radius: radius, startAngle: CGFloat.pi*3/2, endAngle: CGFloat.pi/2, clockwise: true)
-        oval.close()
-        return oval
+    private func ovalPath(in rect: CGRect) -> UIBezierPath {
+        return UIBezierPath(ovalIn: rect)
     }
     
     private func pathForDiamond(in rect: CGRect) -> UIBezierPath {
         let diamond = UIBezierPath()
-        diamond.move(to: CGPoint(x: rect.minX, y: rect.midY))
-        diamond.addLine(to: CGPoint(x: rect.midX, y: rect.minY))
-        diamond.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+
+        let offset = CGPoint(x: rect.width / 8, y: rect.height / 4)
+        let squashedWidthOffset = (rect.width - 2 * offset.x) / 3.5
+        
+        diamond.move(to: CGPoint(x: rect.minX + offset.x , y: rect.midY - offset.y))
+        diamond.addLine(to: CGPoint(x: rect.midX - squashedWidthOffset, y: rect.minY))
+        diamond.addLine(to: CGPoint(x: rect.midX + squashedWidthOffset, y: rect.minY))
+        diamond.addLine(to: CGPoint(x: rect.maxX - offset.x, y: rect.midY - offset.y))
         diamond.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
         diamond.close()
+        
         return diamond
     }
     
     private func stripeRect(_ rect: CGRect) {
         let stripe = UIBezierPath()
-        stripe.lineWidth = 1.0
         stripe.move(to: CGPoint(x: rect.minX, y: bounds.minY ))
         stripe.addLine(to: CGPoint(x: rect.minX, y: bounds.maxY))
-        let stripeCount = Int(faceFrame.width / interStripeSpace)
+        
+        let interStripeSpace: CGFloat = 5.0
+        let stripeCount = Int(cardRect.width / interStripeSpace)
         for _ in 1...stripeCount {
             let translation = CGAffineTransform(translationX: interStripeSpace, y: 0)
             stripe.apply(translation)
@@ -193,75 +183,39 @@ class CardView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
-        isOpaque = false
-        contentMode = .redraw
-        
-        layer.borderWidth = borderWidth
-        layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor
-        if isSelected {          // highlight selected card view
-            layer.borderColor = Colors.selected
+        layer.borderWidth = 5.0
+        layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        if isSelected {
+            layer.borderColor = #colorLiteral(red: 1, green: 0.8781439489, blue: 0.335140321, alpha: 1)
         }
-        if let matched = isMatched { // highlight matched 3 cards
+        if let matched = isMatched {
             if matched {
-                layer.borderColor = Colors.matched
+                layer.borderColor = #colorLiteral(red: 1, green: 0, blue: 0.07474343349, alpha: 1)
             } else {
-                layer.borderColor = Colors.misMatched
+                layer.borderColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
             }
         }
     }
-    
-    private struct Colors {
-        static let green = #colorLiteral(red: 0, green: 0.5628422499, blue: 0.3188166618, alpha: 1)
-        static let red = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
-        static let purple = #colorLiteral(red: 0.5791940689, green: 0.1280144453, blue: 0.5726861358, alpha: 1)
-        
-        static let selected = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1).cgColor
-        static let matched = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1).cgColor
-        static var misMatched = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).cgColor
-        static let hint = #colorLiteral(red: 1, green: 0.5212053061, blue: 1, alpha: 1).cgColor
+
+    private var maxCardRect: CGRect {
+        let scale: CGFloat = 3.0 / 4.0
+        let width = bounds.width * scale
+        let height = bounds.height * scale
+        return bounds.insetBy(dx: (bounds.width - width) / 2,
+                              dy: (bounds.height - height) / 2)
     }
     
-    private struct SizeRatio {
-        static let maxFaceSizeToBoundsSize: CGFloat = 0.75
-        static let pictureHeightToFaceHeight: CGFloat = 0.25
-    }
-    
-    private struct AspectRatio {
-        static let faceFrame: CGFloat = 0.60
-    }
-    
-    private var maxFaceFrame: CGRect {
-        return bounds.zoomed(by: SizeRatio.maxFaceSizeToBoundsSize)
-    }
-    
-    private var faceFrame: CGRect {
-        let faceWidth = maxFaceFrame.height * AspectRatio.faceFrame
-        return maxFaceFrame.insetBy(dx: (maxFaceFrame.width - faceWidth)/2, dy: 0)
+    private var cardRect: CGRect {
+        let width = maxCardRect.height * 0.6
+        return maxCardRect.insetBy(dx: (maxCardRect.width - width) / 2, dy: 0)
     }
     
     private var pictureHeight: CGFloat {
-        return faceFrame.height * SizeRatio.pictureHeightToFaceHeight
+        return cardRect.height / 4
     }
     
     private var interPictureHeight: CGFloat {
-        return (faceFrame.height - (3 * pictureHeight)) / 2
-    }
-    
-    private let interStripeSpace: CGFloat = 5.0
-    private let borderWidth: CGFloat = 5.0
-}
-
-extension CGRect {
-    func zoomed(by scale: CGFloat) -> CGRect {
-        let newWidth = width * scale
-        let newHeight = height * scale
-        return insetBy(dx: (width - newWidth) / 2, dy: (height - newHeight) / 2)
-    }
-}
-extension CGPoint {
-    func offsetBy(dx: CGFloat, dy: CGFloat) -> CGPoint {
-        return CGPoint(x: x+dx, y: y+dy)
+        return (cardRect.height - (3 * pictureHeight)) / 2
     }
 }
 

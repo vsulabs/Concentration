@@ -10,7 +10,6 @@ import UIKit
 
 class GridView : UIView
 {
-    // TODO: Add method 'addCard' without full redraw
     var cards = [CardView]() {
         willSet {
             for card in cards {

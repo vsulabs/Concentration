@@ -47,7 +47,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "139"
             endingLineNumber = "139"
-            landmarkName = "deal3MoreCardsGesture(recognizedBy:)"
+            landmarkName = "openCard(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
