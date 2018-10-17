@@ -96,6 +96,21 @@ class SetGame
         }
     }
     
+    func squashCards() {
+        var srcId = 0
+        for dstId in 0..<dealedCardIds.count {
+            if dealedCardIds[dstId] != -1 {
+                continue
+            }
+            
+            while dealedCardIds[srcId] == -1 {
+                srcId += 1
+            }
+            
+            dealedCardIds[dstId] = dealedCardIds[srcId]
+        }
+    }
+    
     func deal(cardCount: Int) {
         let selectedAll3Cards = !selectedCardIds.contains(-1)
         if selectedAll3Cards {
@@ -172,6 +187,7 @@ class SetGame
             } else {
                 dealedCardIds[cardId] = -1
                 notifier.cardRemoved(cardId: cardId)
+                squashCards()
             }
         }
         

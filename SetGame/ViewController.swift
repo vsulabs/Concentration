@@ -19,7 +19,6 @@ class ViewController: UIViewController, GameNotifier {
     }
     
     func cardReplaced(cardId: Int, card: Card) {
-        // TODO: Use 'replaceCard'
         var cards = grid.cards
         let cardView = CardView(card)
         let tap = UITapGestureRecognizer(
@@ -35,7 +34,6 @@ class ViewController: UIViewController, GameNotifier {
     }
     
     func cardRemoved(cardId: Int) {
-        // TODO: Use 'removeCard'
         var cards = grid.cards
         cards.remove(at: cardId)
         grid.cards = cards
@@ -54,7 +52,6 @@ class ViewController: UIViewController, GameNotifier {
     }
     
     func cardAdded(cardId: Int, card: Card) {
-        // TODO: Use 'addCard'
         var cards = grid.cards
         let cardView = CardView(card)
         let tap = UITapGestureRecognizer(
